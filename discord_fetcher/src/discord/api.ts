@@ -37,23 +37,23 @@ async function fetchMessages(file : fs.WriteStream, before : string|null) : Prom
   }
 
   const lastId = batch.at(-1)?.id ?? null;
-  return { stop, lastId , count};
+  return { stop, lastId, count};
 }
 
-export async function getMessageUntilDate() : Promise<void> {
-  let before : string | null = null;
+export async function getMessageUntilDate(): Promise<void> {
+  let before: string | null = null;
   let total = 0;
-  let finished : boolean = false;
-  const file = fs.createWriteStream(OUTPUT_FILE, {flags: "a"}) // "a" for append
-  
-  while (true) {
-    const { stop, lastId, count} = await fetchMessages(file, before);
-    total+=count;
+  let stop = false;
 
-    if (stop || !lastId) break;
-    before = lastId;
-  }
+  const file = fs.createWriteStream(OUTPUT_FILE, { flags: "a" }); // "a" for append
 
-  file.end();
-  console.log("finished")
+  do {
+    const result = await fetchMessages(file, before);
+    total += result.count;
+    stop = result.stop;
+    before = result.lastId;
+  } while (!stop && before);
+
+  await new Promise<void>((resolve) => file.end(resolve));
+  console.log(`Finished — ${total} messages written.`);
 }
