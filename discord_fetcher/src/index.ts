@@ -1,4 +1,6 @@
-import {TOKEN} from './config.js'
+import { getMessageUntilDate } from './discord/api.js';
 
 
-console.log(TOKEN)
+(async() => {
+  await getMessageUntilDate();
+})()
