@@ -27,3 +27,10 @@ export interface DiscordMessage {
   components: any[];
   [key: string]: any;
 }
+
+
+export interface FetchDiscordMessagesResult {
+  stop: boolean;
+  lastId: string | null;
+  count: number;
+};

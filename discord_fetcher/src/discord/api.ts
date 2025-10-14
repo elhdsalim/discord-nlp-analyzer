@@ -1,25 +1,29 @@
-import type { File } from "buffer";
 import { TOKEN, CHANNEL_ID, LIMIT, OUTPUT_FILE, STOP_DATE } from "../config.js";
-import type { DiscordMessage } from "../types.js";
+import type { DiscordMessage, FetchDiscordMessagesResult } from "../types.js";
 import axios from "axios";
 import * as fs from 'fs';
 
-export async function getMessages(before : string | null = null, limit = LIMIT) : Promise<DiscordMessage[]> {
+export async function getMessages(before : string | null = null) : Promise<DiscordMessage[]> {
   let url = `https://discord.com/api/v9/channels/${CHANNEL_ID}/messages?limit=${LIMIT}`
   if (before) url = `${url}&before=${before}`;
 
-  const { data } = await axios.get<DiscordMessage[]>(url, {
-    headers: { Authorization: TOKEN }
-  })
+  try {
+      const { data } = await axios.get<DiscordMessage[]>(url, {
+        headers: { Authorization: TOKEN }
+      })
 
-  
-  return data;
+      return data;
+  } catch (error) {
+    console.error("Error while fetching messages", error)
+    return [];
+  }
 };
 
-async function fetchMessages(file : fs.WriteStream, before : string|null, total : number) : Promise<{stop: boolean, lastId: string | null}> {
+async function fetchMessages(file : fs.WriteStream, before : string|null) : Promise<FetchDiscordMessagesResult> {
   const batch : DiscordMessage[] = await getMessages(before);
   let stop : boolean = false
-  if (batch.length === 0) return {stop : true, lastId : null};
+  let count = 0;
+  if (batch.length === 0) return {stop : true, lastId : null, count};
 
   for (const msg of batch) {
     const timestamp = new Date(msg.timestamp);
@@ -29,11 +33,11 @@ async function fetchMessages(file : fs.WriteStream, before : string|null, total 
     }
 
     file.write(JSON.stringify(msg) + "\n");
-    total++;
+    count++;
   }
 
   const lastId = batch.at(-1)?.id ?? null;
-  return { stop, lastId };
+  return { stop, lastId , count};
 }
 
 export async function getMessageUntilDate() : Promise<void> {
@@ -43,10 +47,10 @@ export async function getMessageUntilDate() : Promise<void> {
   const file = fs.createWriteStream(OUTPUT_FILE, {flags: "a"}) // "a" for append
   
   while (true) {
-    const { stop, lastId } = await fetchMessages(file, before, total);
+    const { stop, lastId, count} = await fetchMessages(file, before);
+    total+=count;
 
     if (stop || !lastId) break;
-    
     before = lastId;
   }
 
