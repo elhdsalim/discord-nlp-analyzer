@@ -1,0 +1,31 @@
+{
+  "name": "discord-nlp-analyzer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elhdsalim/discord-nlp-analyzer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elhdsalim/discord-nlp-analyzer/issues"
+  },
+  "homepage": "https://github.com/elhdsalim/discord-nlp-analyzer#readme",
+  "dependencies": {
+    "@xenova/transformers": "^2.17.2",
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2"
+  }
+}
