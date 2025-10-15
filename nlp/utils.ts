@@ -28,7 +28,7 @@ export function readMessages() : DiscordMessage[] {
 
 
 // here its a json file, so i can parse it directly :-)
-export function readEmbeddings() {
+export function readEmbeddings() : {messages : string[], embeddings : any } {
   const content = fs.readFileSync("embeddings.json", "utf-8");
   try {
     const { messages, embeddings } = JSON.parse(content);
@@ -38,7 +38,6 @@ export function readEmbeddings() {
         embeddings
     };
   } catch (error) {
-    console.error("❌ Erreur lors du parsing de embeddings.json :", error);
-    return null;
+    throw new Error("erreur parsing embeddings.json");
   }
 }
