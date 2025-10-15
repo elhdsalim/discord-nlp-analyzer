@@ -24,9 +24,13 @@ async function batchEmbeddingRequest(contents : string[]) {
 export async function makeEmbeddings() {
   const messages = readMessages();
   const contents = messages
-    .map(m => m.content?.trim()) // remove spaces
-    .filter(c => c && c.length > 0) // avoid undefined msgs, and should have at least 1 char
-
+    .map(m => {
+      const author = m.author?.username ?? "inconnu";
+      const text = m.content?.trim();
+      if (!text) return null;
+      return `${author}: ${text}`;
+  })
+  .filter((c): c is string => c !== null);
   const embeddings = await batchEmbeddingRequest(contents);
 
   fs.writeFileSync("embeddings.json", JSON.stringify({
