@@ -140,3 +140,4 @@ vite.config.ts.timestamp-*
 
 t.js
 messages.ndjson
+embeddings.json
