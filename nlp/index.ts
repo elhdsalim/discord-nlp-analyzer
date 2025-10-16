@@ -25,7 +25,7 @@ async function getTopMessages(embeddings : any , messages:string[], questionEmbe
     
     const { messages, embeddings } = readEmbeddings();
     console.log(`${messages.length} loaded msgs`);
-    const question = "Question";
+    const question = "Question.";
 
     const data = await createQuestionEmbedding(question);
 
