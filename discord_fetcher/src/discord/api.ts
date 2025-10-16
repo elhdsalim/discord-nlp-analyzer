@@ -8,9 +8,12 @@ export async function getMessages(before : string | null = null) : Promise<Disco
   if (before) url = `${url}&before=${before}`;
 
   try {
+
+      if (!TOKEN) throw new Error("TOKEN is missing in config");
+
       const { data } = await axios.get<DiscordMessage[]>(url, {
-        headers: { Authorization: TOKEN }
-      })
+        headers: { 'Authorization': TOKEN }
+      });
 
       return data;
   } catch (error) {
