@@ -43,20 +43,28 @@ async function fetchMessages(file : fs.WriteStream, before : string|null) : Prom
   return { stop, lastId, count};
 }
 
-export async function getMessageUntilDate(): Promise<void> {
-  let before: string | null = null;
-  let total = 0;
-  let stop = false;
 
-  const file = fs.createWriteStream(OUTPUT_FILE, { flags: "a" }); // "a" for append
+export async function getMessagesUntilDate(): Promise<void> {
+  const file = fs.createWriteStream(OUTPUT_FILE, { flags: "a" });
 
-  do {
-    const result = await fetchMessages(file, before);
-    total += result.count;
-    stop = result.stop;
-    before = result.lastId;
-  } while (!stop && before);
+  let cursor: string | null = null;
+  let totalMessages = 0;
 
-  await new Promise<void>((resolve) => file.end(resolve));
-  console.log(`Finished — ${total} messages written.`);
+  try {
+    while (true) {
+      const { count, lastId, stop } = await fetchMessages(file, cursor);
+
+      totalMessages += count;
+
+      if (stop || !lastId) {
+        break;
+      }
+
+      cursor = lastId;
+    }
+  } finally {
+    await new Promise<void>(resolve => file.end(resolve));
+  }
+
+  console.log(`Finished — ${totalMessages} messages written.`);
 }
