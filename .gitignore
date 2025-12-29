@@ -138,6 +138,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-t.js
 messages.ndjson
 embeddings.json
+chunk_embeddings.json
+chunks.ndjson
