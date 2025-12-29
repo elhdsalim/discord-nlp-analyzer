@@ -1,6 +1,6 @@
-import { getMessageUntilDate } from './discord/api.js';
+import { getMessagesUntilDate } from './discord/api.js';
 
 
 (async() => {
-  await getMessageUntilDate();
+  await getMessagesUntilDate();
 })()
