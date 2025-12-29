@@ -1,4 +1,3 @@
-// import { makeEmbeddings } from "./embedding.js";
 import { readEmbeddings } from "./utils.js";
 import cosineSimilarity from "compute-cosine-similarity";
 import { createChat, createQuestionEmbedding } from "./openai.js";
