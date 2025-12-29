@@ -77,3 +77,10 @@ npx tsx nlp/search_chunks.ts "how to fix this bug"
 ```
 
 The script prints the **most relevant chunks**, including timestamps and enough surrounding context to understand the discussion.
+
+
+## Stack used
+- TypeScript / Node.js
+- Discord REST API
+- OpenAI embeddings
+- NDJSON for storage
