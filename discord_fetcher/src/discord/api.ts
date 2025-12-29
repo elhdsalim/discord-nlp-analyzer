@@ -1,7 +1,7 @@
 import { TOKEN, CHANNEL_ID, LIMIT, OUTPUT_FILE, STOP_DATE } from "../config.js";
 import type { DiscordMessage, FetchDiscordMessagesResult } from "../types.js";
 import axios from "axios";
-import * as fs from 'fs';
+import fs from "fs";
 
 export async function getMessages(before: string | null = null): Promise<DiscordMessage[]> {
     let url = `https://discord.com/api/v9/channels/${CHANNEL_ID}/messages?limit=${LIMIT}`
