@@ -24,7 +24,7 @@ export async function getMessages(before: string | null = null): Promise<Discord
 
 async function fetchMessages(file: fs.WriteStream, before: string | null): Promise<FetchDiscordMessagesResult> {
     const batch: DiscordMessage[] = await getMessages(before);
-    let stop: boolean = false
+    let stop = false
     let count = 0;
     if (batch.length === 0) return { stop: true, lastId: null, count };
 
