@@ -1,4 +1,4 @@
-# Discord Semantic Search (NLP Experiment)
+# Discord Semantic Search
 
 I did this to experiment with NLP and data pipelines on a very concrete problem: **finding information inside long Discord discussions**.
 
